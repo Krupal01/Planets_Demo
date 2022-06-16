@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.practical_planets.R
 import kotlin.math.*
@@ -41,6 +42,24 @@ fun SpaceCompose(
             addBtn
         ) = createRefs()
 
+        val mercuryAngle = remember {
+            mutableStateOf(90f)
+        }
+
+
+        fun getRadius(angle: Float, horizontalSemiAxis: Float, verticalSemiAxis: Float): Float {
+            val angleInDegree = Math.toRadians((90-angle).toDouble())
+            val distance = sqrt(
+                x = ((horizontalSemiAxis.pow(2) * ((1 + cos( 2*angleInDegree)) / 2)) + (verticalSemiAxis.pow(2) * ((1 - cos(2 * angleInDegree)) / 2)))
+//            x= (((horizontalSemiAxis * cos(angleInDegree)).pow(2)) + ((verticalSemiAxis * sin(angleInDegree)).pow(2)))
+            )
+            return ((distance * 100.0).roundToInt() / 100.0).toFloat()
+        }
+
+        fun isAngle60():Boolean{
+            return (90 - mercuryAngle.value)>=30 && (90 - mercuryAngle.value)<=180
+        }
+
         Image(
             painter = painterResource(id = R.drawable.space),
             contentDescription = null,
@@ -64,26 +83,16 @@ fun SpaceCompose(
                     start.linkTo(space.start)
                     top.linkTo(space.top)
                     bottom.linkTo(space.bottom)
-                },
+                }
+                .zIndex(if(isAngle60()) 2f else 1f),
             contentScale = ContentScale.FillHeight
         )
 
-        val mercuryAngle = remember {
-            mutableStateOf(90f)
-        }
 
-
-        fun getRadius(angle: Float, horizontalSemiAxis: Float, verticalSemiAxis: Float): Float {
-            val angleInDegree = Math.toRadians((90-angle).toDouble())
-            val distance = sqrt(
-                x = ((horizontalSemiAxis.pow(2) * ((1 + cos( 2*angleInDegree)) / 2)) + (verticalSemiAxis.pow(2) * ((1 - cos(2 * angleInDegree)) / 2)))
-//            x= (((horizontalSemiAxis * cos(angleInDegree)).pow(2)) + ((verticalSemiAxis * sin(angleInDegree)).pow(2)))
-            )
-            return ((distance * 100.0).roundToInt() / 100.0).toFloat()
-        }
 
         Button(
             onClick = {
+                if((90-mercuryAngle.value)==360f){mercuryAngle.value = 90f}
                 mercuryAngle.value = mercuryAngle.value - 1
             },
             modifier = Modifier
@@ -109,7 +118,7 @@ fun SpaceCompose(
                     mercuryAngle.value,
                     getRadius(mercuryAngle.value ,70f,50f).dp
                 )
-            }
+            }.zIndex(if(isAngle60()) 1f else 2f)
         )
 
         VenusCompose(modifier = Modifier.constrainAs(venus){
@@ -118,7 +127,7 @@ fun SpaceCompose(
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,105f,70f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
 
         EarthCompose(modifier = Modifier.constrainAs(earth){
             circular(
@@ -126,14 +135,14 @@ fun SpaceCompose(
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,150f,100f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
         MarsCompose(modifier = Modifier.constrainAs(mars){
             circular(
                 sun,
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,210f,110f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
 
         JupiterCompose(modifier = Modifier.constrainAs(jupiter){
             circular(
@@ -141,7 +150,7 @@ fun SpaceCompose(
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,300f,120f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
 
         SaturnCompose(modifier = Modifier.constrainAs(saturn){
             circular(
@@ -149,7 +158,7 @@ fun SpaceCompose(
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,400f,130f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
 
         UranusCompose(modifier = Modifier.constrainAs(uranus){
             circular(
@@ -157,7 +166,7 @@ fun SpaceCompose(
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,470f,140f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
 
         NeptuneCompose(modifier = Modifier.constrainAs(neptune){
             circular(
@@ -165,7 +174,7 @@ fun SpaceCompose(
                 mercuryAngle.value,
                 getRadius(mercuryAngle.value ,520f,150f).dp
             )
-        })
+        }.zIndex(if(isAngle60()) 1f else 2f))
 
 
     }
