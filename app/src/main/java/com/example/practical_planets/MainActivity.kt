@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
+import com.example.practical_planets.compose.AdvanceSpaceCompose
 import com.example.practical_planets.compose.SpaceCompose
 import com.example.practical_planets.ui.theme.Practical_PlanetsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +28,11 @@ class MainActivity : ComponentActivity() {
                     val configuration = LocalConfiguration.current
                     when (configuration.orientation) {
                         Configuration.ORIENTATION_LANDSCAPE -> {
-                            SpaceCompose(
-                                modifier = Modifier.fillMaxSize(),
+//                            SpaceCompose(
+//                                modifier = Modifier.fillMaxSize(),
+//                            )
+                            AdvanceSpaceCompose(
+                                modifier = Modifier.fillMaxSize()
                             )
                         }
                         else -> {
